@@ -52,7 +52,7 @@ const Cart = () => {
           </div>
         </div>
       ) : (
-        <div className={loading ? "hidden" : "block mt-32"}>
+        <div className={loading ? "hidden" : "block mt-32 text-center"}>
           <p>No items here:(</p>
         </div>
       )}
