@@ -2,9 +2,9 @@ import { useCart } from "react-use-cart";
 import { useState, useCallback } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-import Loading from '../../components/Loading/Loading';
-import PoyntCollect from '../../components/PoyntCollect/PoyntCollect';
-import ProductsTable from '../../components/ProductsTable/ProductsTable';
+import Loading from '../components/Loading';
+import PoyntCollect from '../components/PoyntCollect';
+import ProductsTable from '../components/ProductsTable';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Cart = () => {
 
   return (
     <div className="page">
-      <div className="mt-32">
+      <div className={loading ? "mt-56" : "mt-0"}>
         <Loading loading={loading}/>
       </div>
       {!isEmpty ? (

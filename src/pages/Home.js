@@ -1,7 +1,7 @@
 import { useCart } from "react-use-cart";
-import ProductItem from '../../components/ProductItem/ProductItem';
+import ProductItem from '../components/ProductItem';
 
-import { products } from '../../lib/common/data';
+import { products } from '../lib/common/data';
 
 // import './Home.css';
 

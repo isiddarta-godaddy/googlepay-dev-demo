@@ -3,11 +3,9 @@ import { useAlert } from 'react-alert';
 import Button from 'react-bootstrap-button-loader';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-import './PoyntCollect.css';
-
-import constants from '../../lib/common/constants';
-import { availableCouponCodes } from '../../lib/common/data';
-import { createOrder, buildLineItems, buildTotal, getShippingMethods } from '../../lib/helpers/wallet';
+import constants from '../lib/common/constants';
+import { availableCouponCodes } from '../lib/common/data';
+import { createOrder, buildLineItems, buildTotal, getShippingMethods } from '../lib/helpers/wallet';
 
 const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartTotal, couponCode}) => {
   const alert = useAlert();
@@ -271,11 +269,17 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
   ]);
 
   const button = (
-    <Button className="poynt-collect-button" loading={buttonLoading} onClick={() => getNonce()}>Pay with card</Button>
+    <Button 
+      className="bg-green-500 px-16 w-full py-2 rounded-md m-2 font-bold text-md order-2 sm:w-auto" 
+      loading={buttonLoading} 
+      onClick={() => getNonce()}
+    >
+      Pay with card
+    </Button>
   );
 
   return ( 
-    <div id={collectId} className="poynt-collect">
+    <div id={collectId} className="poynt-collect flex flex-wrap justify-end max-w-90 collect-wallet:w-full sm:collect-wallet:w-auto">
       {options.paymentMethods?.card ? button : null}
     </div>
   );

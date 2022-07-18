@@ -1,13 +1,13 @@
 import { Routes, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import { useCart } from "react-use-cart";
 
-import Home from "./pages/Home/Home";
-import Cart from "./pages/Cart/Cart";
-import Details from "./pages/Details/Details";
-import Checkout from "./pages/Checkout/Checkout";
-import SuccessPage from "./pages/SuccessPage/SuccessPage";
+import Home from "./pages/Home";
+import Cart from "./pages/Cart";
+import Details from "./pages/Details";
+import Checkout from "./pages/Checkout";
+import SuccessPage from "./pages/SuccessPage";
 
-import CartIcon from './components/CartIcon/CartIcon';
+import CartIcon from './components/CartIcon';
 
 import "./lib/collect/bundle";
 
@@ -20,7 +20,7 @@ function App() {
         <Link to="/">
           <h1 className="text-3xl font-bold hover:underline">GD Happy Merchant</h1>
         </Link>
-        <div className="absolute top-0 right-2">
+        <div className="absolute top-0 right-2 text-2xl text-purple-600 hover:text-purple-900">
           <CartIcon totalItems={totalItems}/>
         </div>
       </div>

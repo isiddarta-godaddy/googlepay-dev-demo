@@ -12,5 +12,11 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant('child', '& > *');
+      addVariant('child-hover', '& > *:hover');
+      addVariant('collect-wallet', '& >  #wallet-buttons-container');
+    }
+  ],
 }

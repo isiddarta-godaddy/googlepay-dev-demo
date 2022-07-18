@@ -4,9 +4,9 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 const CartIcon = ({totalItems}) => {
   return (
-    <Link to="/cart" className="relative inline-flex hover:nderline hover:text-purple-700">
+    <Link to="/cart" className="relative inline-flex hover:no-underline">
       <FontAwesomeIcon className="fa-lg" icon={faShoppingCart} />
-      <span className="absolute flex justify-center items-center text-sm bottom-3 left-3 w-4 h-4 text-white bg-blue-500 rounded-full">
+      <span className="absolute flex justify-center items-center text-sm bottom-5 left-6 w-4 h-4 text-white bg-green-600 rounded-full">
         {totalItems}
       </span>
     </Link>

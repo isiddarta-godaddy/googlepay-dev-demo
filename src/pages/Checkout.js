@@ -2,16 +2,13 @@ import { useCart } from "react-use-cart";
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Loading from "../../components/Loading/Loading";
-import CartIcon from "../../components/CartIcon/CartIcon";
-import PoyntCollect from "../../components/PoyntCollect/PoyntCollect";
-import ProductsTable from "../../components/ProductsTable/ProductsTable";
-
-import "./Checkout.css";
+import Loading from "../components/Loading";
+import PoyntCollect from "../components/PoyntCollect";
+import ProductsTable from "../components/ProductsTable";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items, cartTotal, totalItems, isEmpty, emptyCart } = useCart();
+  const { items, cartTotal, isEmpty, emptyCart } = useCart();
   const [loading, setLoading] = useState(isEmpty ? false : true);
 
   const options = {
@@ -33,13 +30,14 @@ const Checkout = () => {
   }, [navigate, emptyCart]);
 
   return (
-    <div className="page">
-      <Loading loading={loading}/>
-      <CartIcon totalItems={totalItems}/>
+    <div>
+      <div className={loading ? "mt-56" : "mt-0"}>
+        <Loading loading={loading}/>
+      </div>
       {!isEmpty ? (
-        <div className={loading ? "disabled" : "active"}>
+        <div className={loading ? "hidden" : "block"}>
           <ProductsTable/>
-          <div className="collect_wrapper">
+          <div className="flex justify-center items-center">
             <PoyntCollect
               cartItems={items}
               cartTotal={cartTotal}
@@ -51,7 +49,7 @@ const Checkout = () => {
           </div>
         </div>
       ) : (
-        <div className={loading ? "disabled" : "active"}>
+        <div className={loading ? "hidden" : "block"}>
           <p>No items in the cart:(</p>
         </div>
       )}

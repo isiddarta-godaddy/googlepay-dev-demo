@@ -1,8 +1,6 @@
 import Confetti from 'react-confetti';
 import useWindowSize from 'react-use/lib/useWindowSize';
 
-import './SuccessPage.css';
-
 const SuccessPage = () => {
   const { width, height } = useWindowSize();
 

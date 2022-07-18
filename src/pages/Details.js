@@ -2,10 +2,10 @@ import { useCart } from "react-use-cart";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
-import Loading from "../../components/Loading/Loading";
-import PoyntCollect from '../../components/PoyntCollect/PoyntCollect';
+import Loading from "../components/Loading";
+import PoyntCollect from '../components/PoyntCollect';
 
-import { products } from '../../lib/common/data';
+import { products } from '../lib/common/data';
 
 const Details = () => {
   const params = useParams();
