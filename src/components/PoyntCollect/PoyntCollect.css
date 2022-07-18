@@ -1,0 +1,31 @@
+.poynt-collect {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 900px;
+  /* margin: 0 auto; */
+}
+
+.poynt-collect > iframe {
+  flex-basis: 100%;
+  order: 1;
+}
+
+.poynt-collect > .poynt-collect-button {
+  order: 2;
+  width: 240px;
+  height: 40px;
+  margin: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background-color: #5cbd5c;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.poynt-collect > #wallet-buttons-container {
+  order: 3;
+}
