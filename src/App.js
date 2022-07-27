@@ -9,7 +9,7 @@ import SuccessPage from "./pages/SuccessPage";
 
 import CartIcon from './components/CartIcon';
 
-import "./lib/collect/bundle";
+// import "./lib/collect/bundle";
 
 function App() {
   const { totalItems } = useCart();

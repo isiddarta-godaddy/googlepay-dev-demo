@@ -49,30 +49,32 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
     console.log('here', collect.current);
     window.poynt = collect.current;
-    
-    collect.current.supportWalletPayments().then((result) => {
-      if (!collect.current) {
-        return;
-      }
 
-      const paymentMethods = [];
+    (async () => {
+      try {
+        const result = await collect.current.supportWalletPayments();
 
-      if (options.paymentMethods?.card) {
-        paymentMethods.push("card");
-      }
+        if (!collect.current) {
+          return;
+        }
 
-      if (options.paymentMethods?.applePay && result.applePay) {
-        paymentMethods.push("apple_pay");
-      } else if (options.paymentMethods?.googlePay && result.googlePay) {
-        paymentMethods.push("google_pay");
-      }
+        const paymentMethods = [];
 
-      if (!paymentMethods.length) {
-        return setLoading(false);
-      }
+        if (options.paymentMethods?.card) {
+          paymentMethods.push("card");
+        }
 
-      if (paymentMethods.length) {
-        collect.current.mount(collectId, document, {
+        if (options.paymentMethods?.applePay && result.applePay) {
+          paymentMethods.push("apple_pay");
+        } else if (options.paymentMethods?.googlePay && result.googlePay) {
+          paymentMethods.push("google_pay");
+        }
+
+        if (!paymentMethods.length) {
+          return setLoading(false);
+        }
+
+        await collect.current.mount(collectId, document, {
           amount: 2000,
           paymentMethods: paymentMethods,
           iFrame: constants.poyntCollect.iFrame,
@@ -82,20 +84,19 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss
         });
-      }
-    }).catch((error) => {
-      if (setLoading) {
+
+        setLoading(false);
+      } catch(error) {
+        console.log(error);
         setLoading(false);
       }
+    })();
 
-      console.log(error);
-    });
-
-    collect.current.on("iframe_ready", () => {
-      if (setLoading) {
-        setLoading(false);
-      }
-    });
+    // collect.current.on("iframe_ready", () => {
+    //   if (setLoading) {
+    //     setLoading(false);
+    //   }
+    // });
 
     collect.current.on("wallet_button_click", (data) => {
       console.log("BUTTON CLICKED! Source: " + data.source);
