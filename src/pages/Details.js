@@ -19,21 +19,50 @@ const Details = () => {
   const product = collectProducts[0];
   const [loading, setLoading] = useState(product ? true : false);
 
-  const onNonce = useCallback((nonce) => {
-    emptyCart();
-    console.log("NONCE RECEIVED", nonce);
-    navigate("/success-page");
-  }, [navigate, emptyCart]);
+  const onNonce = useCallback(async (nonce, request) => {
+    try {
+      console.log("NONCE RECEIVED", nonce);
+      console.log('charging...');
 
-  const options = {
-    requireEmail: true,
-    requirePhone: true,
-    supportCouponCode: true,
-    paymentMethods: {
-      googlePay: true,
-      applePay: true
+      console.log(JSON.stringify({ nonce, request }));
+  
+      const response = await fetch(window.chargeEndpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nonce,
+          amount: Number(request.total.amount) * 100,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message);
+      }
+
+      console.log('SUCCESSFUL CHARGE', result);
+      
+      emptyCart();
+      navigate("/success-page");
+    } catch(error) {
+      throw error;
     }
-  };
+  }, [navigate]);
+
+  const options = useMemo(() => {
+    return {
+      requireEmail: true,
+      requirePhone: true,
+      supportCouponCode: true,
+      paymentMethods: {
+        googlePay: true,
+        applePay: true
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!product) {

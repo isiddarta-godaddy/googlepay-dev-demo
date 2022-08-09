@@ -9,7 +9,9 @@ import SuccessPage from "./pages/SuccessPage";
 
 import CartIcon from './components/CartIcon';
 
-// import "./lib/collect/bundle";
+import "./lib/bundle-with-recaptcha";
+
+window.chargeEndpoint = 'https://35ed-78-137-2-160.ngrok.io/collect/charge';
 
 function App() {
   const { totalItems } = useCart();

@@ -74,7 +74,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           return setLoading(false);
         }
 
-        await collect.current.mount(collectId, document, {
+        collect.current.mount(collectId, document, {
           amount: 2000,
           paymentMethods: paymentMethods,
           iFrame: constants.poyntCollect.iFrame,
@@ -84,19 +84,17 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss
         });
-
-        setLoading(false);
       } catch(error) {
         console.log(error);
         setLoading(false);
       }
     })();
 
-    // collect.current.on("iframe_ready", () => {
-    //   if (setLoading) {
-    //     setLoading(false);
-    //   }
-    // });
+    collect.current.on("iframe_ready", () => {
+      if (setLoading) {
+        setLoading(false);
+      }
+    });
 
     collect.current.on("wallet_button_click", (data) => {
       console.log("BUTTON CLICKED! Source: " + data.source);
@@ -195,29 +193,31 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       console.log('wallet closed', event);
     });
 
-    collect.current.on("payment_authorized", (event) => {
+    collect.current.on("payment_authorized", async (event) => {
       if (event.source === "google_pay") {
         console.log("GOOGLE PAY TOKEN RECEIVED", event);
-        collect.current.getNonce({ googlePayPaymentToken: event.token });
-        event.complete();
-
-        return;
       }
 
       if (event.source === "apple_pay") {
         console.log("APPLE PAY TOKEN RECEIVED", event);
-        collect.current.getNonce({ applePayPaymentToken: event.token });
-        event.complete();
-
-        return;
       }
 
-      console.error("unknown wallet token");
+      try {
+        await Promise.resolve(onNonce(event.nonce, walletRequest));
+        event.complete();
+      } catch(error) {
+        event.complete({ error });
+      }
     });
     
-    collect.current.on("nonce", (nonce) => {
-      setButtonLoading(false);
-      onNonce(nonce);
+    collect.current.on("nonce", async (nonce) => {
+      try {
+        await Promise.resolve(onNonce(nonce, walletRequest));
+        setButtonLoading(false);
+      } catch(error) {
+        setButtonLoading(false);
+        console.log(error);
+      }
     });
 
     collect.current.on("error", (event) => {

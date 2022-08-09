@@ -1,5 +1,5 @@
 import { useCart } from "react-use-cart";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Loading from "../components/Loading";
@@ -11,23 +11,50 @@ const Checkout = () => {
   const { items, cartTotal, isEmpty, emptyCart } = useCart();
   const [loading, setLoading] = useState(isEmpty ? false : true);
 
-  const options = {
-    requireEmail: true,
-    requirePhone: true,
-    requireShippingAddress: true,
-    supportCouponCode: true,
-    paymentMethods: {
-      card: true,
-      googlePay: true,
-      applePay: true
-    }
-  };
+  const onNonce = useCallback(async (nonce, request) => {
+    try {
+      console.log("NONCE RECEIVED", nonce);
+      console.log('charging...');
+  
+      const response = await fetch(window.chargeEndpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nonce,
+          amount: Number(request.total.amount) * 100,
+        }),
+      });
 
-  const onNonce = useCallback((nonce) => {
-    emptyCart();
-    console.log("NONCE RECEIVED", nonce);
-    navigate("/success-page");
-  }, [navigate, emptyCart]);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message);
+      }
+
+      console.log('SUCCESSFUL CHARGE', result);
+      
+      emptyCart();
+      navigate("/success-page");
+    } catch(error) {
+      throw error;
+    }
+  }, [navigate]);
+
+  const options = useMemo(() => {
+    return {
+      requireEmail: true,
+      requirePhone: true,
+      requireShippingAddress: true,
+      supportCouponCode: true,
+      paymentMethods: {
+        card: true,
+        googlePay: true,
+        applePay: true
+      }
+    };
+  }, []);
 
   return (
     <div>
