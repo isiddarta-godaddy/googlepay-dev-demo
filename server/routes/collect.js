@@ -5,7 +5,7 @@ const util = require("util");
 const cors = require('cors');
 
 const corsOptions = {
-  origin: 'https://pay-demo-dev.web.app/'
+  origin: 'https://pay-demo-dev.web.app',
 };
 
 router.options("/charge", cors(corsOptions));
