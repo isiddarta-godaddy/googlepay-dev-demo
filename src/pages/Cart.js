@@ -14,6 +14,12 @@ const Cart = () => {
   const onNonce = useCallback(async (nonce, request) => {
     try {
       console.log("NONCE RECEIVED", nonce);
+
+      if (!window.chargeEndpoint) {
+        emptyCart();
+        return navigate("/success-page");
+      }
+
       console.log('charging...');
   
       const response = await fetch(window.chargeEndpoint, {

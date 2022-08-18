@@ -22,6 +22,12 @@ const Details = () => {
   const onNonce = useCallback(async (nonce, request) => {
     try {
       console.log("NONCE RECEIVED", nonce);
+
+      if (!window.chargeEndpoint) {
+        emptyCart();
+        return navigate("/success-page");
+      }
+
       console.log('charging...');
 
       console.log(JSON.stringify({ nonce, request }));

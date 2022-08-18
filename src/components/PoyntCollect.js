@@ -82,7 +82,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           locale: constants.poyntCollect.locale,
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
-          customCss: constants.poyntCollect.customCss
+          customCss: constants.poyntCollect.customCss,
+          enableReCaptcha: true,
         });
       } catch(error) {
         console.log(error);
