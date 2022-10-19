@@ -83,7 +83,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss,
-          enableReCaptcha: true,
+          enableReCaptcha: false,
+          enableCardOnFile: true,
         });
       } catch(error) {
         console.log(error);
@@ -95,6 +96,10 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       if (setLoading) {
         setLoading(false);
       }
+    });
+
+    collect.current.on("card_on_file_error", (data) => {
+      console.log(data);
     });
 
     collect.current.on("wallet_button_click", (data) => {

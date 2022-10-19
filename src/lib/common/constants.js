@@ -9,7 +9,7 @@ const constants = {
     currency: "USD",
     iFrame: {
       width: "100%",
-      height: "430px",
+      height: "490px",
       border: "0px",
     },
     additionalFieldsToValidate: ["emailAddress", "firstName", "lastName"],
