@@ -83,8 +83,13 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss,
-          enableReCaptcha: false,
+          enableReCaptcha: true,
           enableCardOnFile: true,
+          cardAgreementOptions: {
+            businessName: "Poynt",
+            businessWebsite: "https://poynt.com",
+            businessPhone: "+1 0123 123 123",
+          },
         });
       } catch(error) {
         console.log(error);
@@ -98,8 +103,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       }
     });
 
-    collect.current.on("card_on_file_error", (data) => {
-      console.log(data);
+    collect.current.on("card_on_file_error", (event) => {
+      console.log("card_on_file_error", event);
     });
 
     collect.current.on("wallet_button_click", (data) => {
@@ -108,6 +113,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
     if (options.requireShippingAddress) {
       collect.current.on("shipping_address_change", (event) => {
+        console.log("shipping_address_change", event);
         order.shippingCountry = event.shippingAddress.countryCode;
       
         if (order.shippingCountry === "US") {
@@ -142,6 +148,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       });
       
       collect.current.on("shipping_method_change", (event) => {
+        console.log("shipping_method_change", event);
         const total = buildTotal(order, event.shippingMethod);
         const lineItems = buildLineItems(order, event.shippingMethod);
         
@@ -156,6 +163,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
     if (options.supportCouponCode) {
       collect.current.on("coupon_code_change", (event) => {
+        console.log("coupon_code_change", event);
         if (!event.couponCode) {
           order.coupon = {
             code: "",
@@ -196,7 +204,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
     }
 
     collect.current.on("close_wallet", (event) => {
-      console.log('wallet closed', event);
+      console.log('close_wallet', event);
     });
 
     collect.current.on("payment_authorized", async (event) => {
