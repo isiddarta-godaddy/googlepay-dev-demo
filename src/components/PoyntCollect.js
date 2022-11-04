@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { useAlert } from 'react-alert';
 import Button from 'react-bootstrap-button-loader';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import constants from '../lib/common/constants';
 import { availableCouponCodes } from '../lib/common/data';
@@ -10,6 +10,9 @@ import { createOrder, buildLineItems, buildTotal, getShippingMethods } from '../
 const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartTotal, couponCode}) => {
   const alert = useAlert();
   const collect = useRef();
+  const order = useRef();
+
+  const [orderLoaded, setOrderLoaded] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const getNonce = () => {
@@ -17,24 +20,31 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
     collect.current.getNonce({});
   };
 
+  useEffect(() => {
+    order.current = createOrder(cartItems, cartTotal, couponCode);
+    setOrderLoaded(true);
+  }, [cartItems, cartTotal, couponCode]);
+
   useLayoutEffect(() => {
+    if (!orderLoaded) {
+      return;
+    }
+
     if (setLoading) {
       setLoading(true);
     }
-
-    const order = createOrder(cartItems, cartTotal, availableCouponCodes[1]);
 
     const walletRequest = {
       merchantName: "GoDaddy Merchant",
       country: constants.poyntCollect.country,
       currency: constants.poyntCollect.currency,
-      lineItems: buildLineItems(order),
-      total: buildTotal(order),
+      lineItems: buildLineItems(order.current),
+      total: buildTotal(order.current),
       requireEmail: options.requireEmail,
       requirePhone: options.requirePhone,
       requireShippingAddress: options.requireShippingAddress,
       supportCouponCode: options.supportCouponCode,
-      couponCode: order.coupon,
+      couponCode: order.current.coupon,
       disableWallets: {
         applePay: !options.paymentMethods?.applePay,
         googlePay: !options.paymentMethods?.googlePay,
@@ -47,8 +57,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       walletRequest
     );
 
-    console.log('here', collect.current);
-    window.poynt = collect.current;
+    console.log('current collect instance: ', collect.current);
+    window.poyntCollect = collect.current;
 
     (async () => {
       try {
@@ -83,12 +93,55 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss,
+          applePayButtonOptions: {
+            onClick: () => {
+              console.log("ORDER", order.current);
+
+              const update = {
+                total: buildTotal(order.current),
+                lineItems: buildLineItems(order.current),
+                couponCode: { ...order.current.coupon },
+              };
+
+              collect.current.startApplePaySession(update);
+            },
+          },
+          googlePayButtonOptions: {
+            onClick: () => {
+              console.log("ORDER", order.current);
+
+              const update = {
+                total: buildTotal(order.current),
+                lineItems: buildLineItems(order.current),
+                couponCode: { ...order.current.coupon },
+              };
+
+              collect.current.startGooglePaySession(update);
+            },
+          },
+          // buttonOptions: {
+          //   onClick: (event) => {
+          //     console.log("ORDER", order.current);
+
+          //     const update = {
+          //       total: buildTotal(order.current),
+          //       lineItems: buildLineItems(order.current),
+          //       couponCode: { ...order.current.coupon },
+          //     };
+
+          //     if (event.source === "apple_pay") {
+          //       collect.current.startApplePaySession(update);
+          //     } else {
+          //       collect.current.startGooglePaySession(update);
+          //     }
+          //   },
+          // },
           enableReCaptcha: true,
           enableCardOnFile: true,
           cardAgreementOptions: {
-            businessName: "Poynt",
-            businessWebsite: "https://poynt.com",
-            businessPhone: "+1 0123 123 123",
+            businessName: "GoDaddy",
+            businessWebsite: "https://www.godaddy.com/",
+            businessPhone: "(555) 555-5555",
           },
         });
       } catch(error) {
@@ -114,15 +167,15 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
     if (options.requireShippingAddress) {
       collect.current.on("shipping_address_change", (event) => {
         console.log("shipping_address_change", event);
-        order.shippingCountry = event.shippingAddress.countryCode;
+        order.current.shippingCountry = event.shippingAddress.countryCode;
       
-        if (order.shippingCountry === "US") {
-          order.taxRate = 0.1;
+        if (order.current.shippingCountry === "US") {
+          order.current.taxRate = 0.1;
         } else {
-          order.taxRate = 0.3;
+          order.current.taxRate = 0.3;
         }
       
-        const shippingMethods = getShippingMethods(order);
+        const shippingMethods = getShippingMethods(order.current);
 
         if (!shippingMethods?.length) {
           event.updateWith({
@@ -135,8 +188,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
         }
       
         const selectedShippingMethod = shippingMethods[0];
-        const total = buildTotal(order, selectedShippingMethod);
-        const lineItems = buildLineItems(order, selectedShippingMethod);
+        const total = buildTotal(order.current, selectedShippingMethod);
+        const lineItems = buildLineItems(order.current, selectedShippingMethod);
   
         const options = {
           lineItems: lineItems,
@@ -149,8 +202,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       
       collect.current.on("shipping_method_change", (event) => {
         console.log("shipping_method_change", event);
-        const total = buildTotal(order, event.shippingMethod);
-        const lineItems = buildLineItems(order, event.shippingMethod);
+        const total = buildTotal(order.current, event.shippingMethod);
+        const lineItems = buildLineItems(order.current, event.shippingMethod);
         
         const options = {
           lineItems: lineItems,
@@ -165,7 +218,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       collect.current.on("coupon_code_change", (event) => {
         console.log("coupon_code_change", event);
         if (!event.couponCode) {
-          order.coupon = {
+          order.current.coupon = {
             code: "",
             label: "",
             amount: "0.00",
@@ -184,18 +237,18 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
             return event.updateWith(options);
           }
       
-          order.coupon = couponCode;
+          order.current.coupon = couponCode;
         }
 
         const shippingMethods = walletRequest.requireShippingAddress ? getShippingMethods(order) : null;
         const selectedShippingMethod = walletRequest.requireShippingAddress ? shippingMethods[0] : null;
-        const total = buildTotal(order, selectedShippingMethod);
-        const lineItems = buildLineItems(order, selectedShippingMethod);
+        const total = buildTotal(order.current, selectedShippingMethod);
+        const lineItems = buildLineItems(order.current, selectedShippingMethod);
           
         const options = {
           lineItems: lineItems,
           shippingMethods: shippingMethods,
-          couponCode: { ...order.coupon },
+          couponCode: { ...order.current.coupon },
           total: total,
         };
       
@@ -267,9 +320,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       collect.current = null;
     };
   }, [
-    cartItems,
-    cartTotal,
-    couponCode,
+    orderLoaded,
     collectId,
     options.paymentMethods?.card,
     options.paymentMethods?.applePay,
