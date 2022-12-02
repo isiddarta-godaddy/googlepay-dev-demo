@@ -4,6 +4,7 @@ const constants = {
   poyntCollect: {
     businessId: "01776564-e3e2-45ea-8f5d-db2440ed4ba8", //DEV
     applicationId: "urn:aid:9c2cc0f7-e2ed-4617-b57c-88dd0b36c3d8", //DEV
+    // applicationId: "urn:aid:poynt.net",
     merchantName: "GD Test Merchant",
     country: "US",
     currency: "USD",
