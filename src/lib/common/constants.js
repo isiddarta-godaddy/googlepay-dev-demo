@@ -1,4 +1,4 @@
-const fonts = '"GD Sherpa", "objektiv-mk2", "Proxima Nova", "Myriad Pro", -apple-system, Helvetica';
+// const fonts = '"GD Sherpa", "objektiv-mk2", "Proxima Nova", "Myriad Pro", -apple-system, Helvetica';
 
 const constants = {
   poyntCollect: {
@@ -13,7 +13,7 @@ const constants = {
       height: "425px",
       border: "0px",
     },
-    additionalFieldsToValidate: ["firstName", "lastName"],
+    additionalFieldsToValidate: ["firstName", "lastName", "emailAddress"],
     locale: "en-US",
     displayComponents: {
       // showLabels: true,

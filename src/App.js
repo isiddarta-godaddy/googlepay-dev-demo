@@ -9,7 +9,7 @@ import SuccessPage from "./pages/SuccessPage";
 
 import CartIcon from './components/CartIcon';
 
-// import "./lib/collect/bundle";
+// import "./lib/collect/collect";
 
 // window.chargeEndpoint = 'http://localhost:3001/collect/charge';
 

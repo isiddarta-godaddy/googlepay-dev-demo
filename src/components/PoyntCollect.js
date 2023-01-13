@@ -93,6 +93,9 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss,
+          buttonOptions: {
+            borderRadius: "100vh",
+          },
           applePayButtonOptions: {
             onClick: () => {
               console.log("ORDER", order.current);
