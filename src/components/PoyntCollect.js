@@ -14,9 +14,18 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
   const [orderLoaded, setOrderLoaded] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [savedCard, setSavedCard] = useState("");
 
-  const getNonce = () => {
+  const getNonce = async () => {
     setButtonLoading(true);
+
+    if (savedCard) {
+      await Promise.resolve(onNonce(savedCard));
+      setButtonLoading(false);
+
+      return;
+    }
+  
     collect.current.getNonce({});
   };
 
@@ -85,6 +94,88 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
         }
 
         collect.current.mount(collectId, document, {
+          savedCards: [
+            {
+              id: 1,
+              type: "JCB",
+              numberLast4: "1234",
+            },
+            {
+              id: 2,
+              type: "VISA",
+              numberLast4: "4412",
+            },
+            {
+              id: 3,
+              type: "ALIPAY",
+              numberLast4: "1454",
+            },
+            {
+              id: 4,
+              type: "PAYPAL",
+              numberLast4: "0000",
+            },
+            {
+              id: 5,
+              type: "MAESTRO",
+              numberLast4: "0044",
+            },
+            {
+              id: 6,
+              type: "DISCOVER",
+              numberLast4: "8860",
+            },
+            {
+              id: 7,
+              type: "UNIONPAY",
+              numberLast4: "0000",
+            },
+            {
+              id: 8,
+              type: "MASTERCARD",
+              numberLast4: "5456",
+            },
+            {
+              id: 9,
+              type: "AMERICAN_EXPRESS",
+              numberLast4: "6000",
+            },
+            {
+              id: 10,
+              type: "DINERS_CLUB",
+              numberLast4: "8800",
+            },
+            {
+              id: 11,
+              type: "EBT",
+              numberLast4: "8800",
+            },
+            {
+              id: 12,
+              type: "BANCOMAT",
+              numberLast4: "8800",
+            },
+            {
+              id: 13,
+              type: "GOPAY",
+              numberLast4: "8800",
+            },
+            {
+              id: 14,
+              type: "DANKORT",
+              numberLast4: "8800",
+            },
+            {
+              id: 15,
+              type: "OTHER",
+              numberLast4: "8800",
+            },
+            {
+              id: 16,
+              type: "INTERAC",
+              numberLast4: "8800",
+            },
+          ],
           amount: 2000,
           paymentMethods: paymentMethods,
           iFrame: constants.poyntCollect.iFrame,
@@ -93,9 +184,6 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           displayComponents: constants.poyntCollect.displayComponents,
           style: constants.poyntCollect.style,
           customCss: constants.poyntCollect.customCss,
-          buttonOptions: {
-            borderRadius: "100vh",
-          },
           applePayButtonOptions: {
             onClick: () => {
               console.log("ORDER", order.current);
@@ -157,6 +245,20 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       if (setLoading) {
         setLoading(false);
       }
+    });
+
+    collect.current.on("iframe_height_change", (event) => {
+      console.log("iframe_height_change", event.data.height);
+  
+      if (event?.data?.height) {
+        const iFrame = document.getElementById("poynt-collect-v2-iframe");
+        iFrame.style.setProperty("height", event.data.height + 80 + "px");
+      }
+    });
+
+    collect.current.on("card_on_file_card_select", (event) => {
+      console.log("card_on_file_card_select", event.data.cardId);
+      setSavedCard(event.data.cardId);
     });
 
     collect.current.on("card_on_file_error", (event) => {

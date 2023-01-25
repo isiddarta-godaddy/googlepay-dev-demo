@@ -113,6 +113,25 @@ const constants = {
         "padding-left": "0px",
         "padding-right": "0px",
       },
+      cardOnFile: {
+        savedCards: {
+          container: {},
+          containerCard: {},
+          containerNewCard: {},
+          cardBox: {},
+          cardBoxActive: {},
+          cardBoxCheck: {},
+          cardBoxCheckmark: {},
+          cardBoxLogo: {},
+          cardBoxContent: {},
+          cardBoxTitle: {},
+          cardBoxText: {},
+          cardLogo: {},
+          addNewCardBox: {},
+          addNewCardBoxIcon: {},
+          addNewCardBoxText: {},
+        }
+      }
     },
   },
 };
