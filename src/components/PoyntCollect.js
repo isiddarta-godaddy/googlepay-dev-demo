@@ -96,84 +96,24 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
         collect.current.mount(collectId, document, {
           savedCards: [
             {
-              id: 1,
-              type: "JCB",
-              numberLast4: "1234",
-            },
-            {
               id: 2,
               type: "VISA",
               numberLast4: "4412",
             },
             {
-              id: 3,
-              type: "ALIPAY",
-              numberLast4: "1454",
-            },
-            {
-              id: 4,
-              type: "PAYPAL",
-              numberLast4: "0000",
-            },
-            {
-              id: 5,
+              id: 2,
               type: "MAESTRO",
               numberLast4: "0044",
             },
             {
-              id: 6,
-              type: "DISCOVER",
-              numberLast4: "8860",
-            },
-            {
-              id: 7,
+              id: 3,
               type: "UNIONPAY",
               numberLast4: "0000",
             },
             {
-              id: 8,
+              id: 4,
               type: "MASTERCARD",
               numberLast4: "5456",
-            },
-            {
-              id: 9,
-              type: "AMERICAN_EXPRESS",
-              numberLast4: "6000",
-            },
-            {
-              id: 10,
-              type: "DINERS_CLUB",
-              numberLast4: "8800",
-            },
-            {
-              id: 11,
-              type: "EBT",
-              numberLast4: "8800",
-            },
-            {
-              id: 12,
-              type: "BANCOMAT",
-              numberLast4: "8800",
-            },
-            {
-              id: 13,
-              type: "GOPAY",
-              numberLast4: "8800",
-            },
-            {
-              id: 14,
-              type: "DANKORT",
-              numberLast4: "8800",
-            },
-            {
-              id: 15,
-              type: "OTHER",
-              numberLast4: "8800",
-            },
-            {
-              id: 16,
-              type: "INTERAC",
-              numberLast4: "8800",
             },
           ],
           amount: 2000,
