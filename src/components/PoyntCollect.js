@@ -96,7 +96,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
         collect.current.mount(collectId, document, {
           savedCards: [
             {
-              id: 2,
+              id: 1,
               type: "VISA",
               numberLast4: "4412",
             },
