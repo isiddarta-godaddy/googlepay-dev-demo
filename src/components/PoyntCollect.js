@@ -198,6 +198,11 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
     collect.current.on("card_on_file_card_select", (event) => {
       console.log("card_on_file_card_select", event.data.cardId);
+
+      setTimeout(() => {
+        document.getElementById(collectId + "_button")?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+
       setSavedCard(event.data.cardId);
     });
 
@@ -384,6 +389,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       className="bg-green-500 px-16 w-full py-2 rounded-md m-2 font-bold text-md order-2 sm:w-auto" 
       loading={buttonLoading} 
       onClick={() => getNonce()}
+      id={collectId + "_button"}
     >
       Pay with card
     </Button>
