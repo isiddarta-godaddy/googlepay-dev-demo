@@ -99,21 +99,37 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
               id: 1,
               type: "VISA",
               numberLast4: "4412",
+              expirationMonth: 12,
+              expirationYear: 2024,
+              cardHolderFirstName: "Harry",
+              cardHolderLastName: "Potter",
             },
             {
               id: 2,
               type: "MAESTRO",
               numberLast4: "0044",
+              expirationMonth: 12,
+              expirationYear: 2024,
+              cardHolderFirstName: "Ron",
+              cardHolderLastName: "Weasley",
             },
             {
               id: 3,
               type: "UNIONPAY",
               numberLast4: "0000",
+              expirationMonth: 12,
+              expirationYear: 2024,
+              cardHolderFirstName: "Hermione",
+              cardHolderLastName: "Granger",
             },
             {
               id: 4,
               type: "MASTERCARD",
               numberLast4: "5456",
+              expirationMonth: 12,
+              expirationYear: 2024,
+              cardHolderFirstName: "Lord",
+              cardHolderLastName: "Voldemort",
             },
           ],
           amount: 2000,
@@ -168,6 +184,9 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           //   },
           // },
           enableReCaptcha: true,
+          reCaptchaOptions: {
+            type: "TEXT",
+          },
           enableCardOnFile: true,
           cardAgreementOptions: {
             businessName: "GoDaddy",
@@ -192,7 +211,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
   
       if (event?.data?.height) {
         const iFrame = document.getElementById("poynt-collect-v2-iframe");
-        iFrame.style.setProperty("height", event.data.height + 80 + "px");
+        iFrame.style.setProperty("height", event.data.height + 10 + "px");
       }
     });
 

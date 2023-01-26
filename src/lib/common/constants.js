@@ -131,7 +131,7 @@ const constants = {
           addNewCardBoxIcon: {},
           addNewCardBoxText: {},
         }
-      }
+      },
     },
   },
 };
