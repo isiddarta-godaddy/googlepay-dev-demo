@@ -71,7 +71,10 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
     (async () => {
       try {
+        const t0 = performance.now();
         const result = await collect.current.supportWalletPayments();
+        const t1 = performance.now();
+        console.log(`supportWalletPayments execution took ${t1 - t0} milliseconds.`);
 
         if (!collect.current) {
           return;
@@ -94,54 +97,10 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
         }
 
         collect.current.mount(collectId, document, {
-          savedCards: [
-            {
-              id: 1,
-              type: "VISA",
-              numberLast4: "4412",
-              expirationMonth: 12,
-              expirationYear: 2024,
-              cardHolderFirstName: "Harry",
-              cardHolderLastName: "Potter",
-            },
-            {
-              id: 2,
-              type: "MAESTRO",
-              numberLast4: "0044",
-              expirationMonth: 12,
-              expirationYear: 2024,
-              cardHolderFirstName: "Ron",
-              cardHolderLastName: "Weasley",
-            },
-            {
-              id: 3,
-              type: "UNIONPAY",
-              numberLast4: "0000",
-              expirationMonth: 12,
-              expirationYear: 2024,
-              cardHolderFirstName: "Hermione",
-              cardHolderLastName: "Granger",
-            },
-            {
-              id: 4,
-              type: "MASTERCARD",
-              numberLast4: "5456",
-              expirationMonth: 12,
-              expirationYear: 2024,
-              cardHolderFirstName: "Lord",
-              cardHolderLastName: "Voldemort",
-            },
-          ],
-          amount: 2000,
+          ...constants.poyntCollect,
           paymentMethods: paymentMethods,
-          iFrame: constants.poyntCollect.iFrame,
-          additionalFieldsToValidate: constants.poyntCollect.additionalFieldsToValidate,
-          locale: constants.poyntCollect.locale,
-          displayComponents: constants.poyntCollect.displayComponents,
-          style: constants.poyntCollect.style,
-          customCss: constants.poyntCollect.customCss,
-          applePayButtonOptions: {
-            onClick: () => {
+          buttonOptions: {
+            onClick: (event) => {
               console.log("ORDER", order.current);
 
               const update = {
@@ -150,48 +109,12 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
                 couponCode: { ...order.current.coupon },
               };
 
-              collect.current.startApplePaySession(update);
+              if (event.source === "apple_pay") {
+                collect.current.startApplePaySession(update);
+              } else {
+                collect.current.startGooglePaySession(update);
+              }
             },
-          },
-          googlePayButtonOptions: {
-            onClick: () => {
-              console.log("ORDER", order.current);
-
-              const update = {
-                total: buildTotal(order.current),
-                lineItems: buildLineItems(order.current),
-                couponCode: { ...order.current.coupon },
-              };
-
-              collect.current.startGooglePaySession(update);
-            },
-          },
-          // buttonOptions: {
-          //   onClick: (event) => {
-          //     console.log("ORDER", order.current);
-
-          //     const update = {
-          //       total: buildTotal(order.current),
-          //       lineItems: buildLineItems(order.current),
-          //       couponCode: { ...order.current.coupon },
-          //     };
-
-          //     if (event.source === "apple_pay") {
-          //       collect.current.startApplePaySession(update);
-          //     } else {
-          //       collect.current.startGooglePaySession(update);
-          //     }
-          //   },
-          // },
-          enableReCaptcha: true,
-          reCaptchaOptions: {
-            type: "TEXT",
-          },
-          enableCardOnFile: true,
-          cardAgreementOptions: {
-            businessName: "GoDaddy",
-            businessWebsite: "https://www.godaddy.com/",
-            businessPhone: "(555) 555-5555",
           },
         });
       } catch(error) {
@@ -329,6 +252,10 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       console.log('close_wallet', event);
     });
 
+    collect.current.on("payment_method_change", (event) => {
+      console.log("payment_method_change", event.paymentMethod);
+    });
+
     collect.current.on("payment_authorized", async (event) => {
       if (event.source === "google_pay") {
         console.log("GOOGLE PAY TOKEN RECEIVED", event);
@@ -339,16 +266,16 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       }
 
       try {
-        await Promise.resolve(onNonce(event.nonce, walletRequest));
+        await Promise.resolve(onNonce({ nonce: event.nonce }, walletRequest));
         event.complete();
       } catch(error) {
         event.complete({ error });
       }
     });
     
-    collect.current.on("nonce", async (nonce) => {
+    collect.current.on("nonce", async (event) => {
       try {
-        await Promise.resolve(onNonce(nonce, walletRequest));
+        await Promise.resolve(onNonce(event.data, walletRequest));
         setButtonLoading(false);
       } catch(error) {
         setButtonLoading(false);
@@ -361,14 +288,18 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
       console.log(event);
 
+      ///open-tokenize request error
       if (event?.data?.message) {
         message = event.data.message;
       }
 
+      //invalid_details = react-payment-inputs error (card data)
+      //missing_fields = some of the fields that were passed to additionalFieldsToValidate are empty
       if (event?.data?.error?.type === 'invalid_details' || event?.data?.error?.type === 'missing_fields') {
         message = event.data.error.message === 'Missing details' ? 'Enter a card number' : event.data.error.message;
       }
 
+      //zip or email is invalid
       if (event?.data?.errorType === "invalidEmail" || event?.data?.errorType === "invalidZip") {
         message = event?.data?.error;
       }

@@ -8,13 +8,55 @@ const constants = {
     merchantName: "GD Test Merchant",
     country: "US",
     currency: "USD",
-    iFrame: {
-      width: "100%",
-      height: "425px",
-      border: "0px",
-    },
-    additionalFieldsToValidate: ["firstName", "lastName", "emailAddress"],
     locale: "en-US",
+    enableReCaptcha: true,
+    reCaptchaOptions: {
+      type: "TEXT",
+    },
+    enableCardOnFile: true,
+    cardAgreementOptions: {
+      businessName: "GoDaddy",
+      businessWebsite: "https://www.godaddy.com/",
+      businessPhone: "(555) 555-5555",
+    },
+    savedCards: [
+      {
+        id: 1,
+        type: "VISA",
+        numberLast4: "4412",
+        expirationMonth: 12,
+        expirationYear: 2024,
+        cardHolderFirstName: "Harry",
+        cardHolderLastName: "Potter",
+      },
+      {
+        id: 2,
+        type: "MAESTRO",
+        numberLast4: "0044",
+        expirationMonth: 12,
+        expirationYear: 2024,
+        cardHolderFirstName: "Ron",
+        cardHolderLastName: "Weasley",
+      },
+      {
+        id: 3,
+        type: "UNIONPAY",
+        numberLast4: "0000",
+        expirationMonth: 12,
+        expirationYear: 2024,
+        cardHolderFirstName: "Hermione",
+        cardHolderLastName: "Granger",
+      },
+      {
+        id: 4,
+        type: "MASTERCARD",
+        numberLast4: "5456",
+        expirationMonth: 12,
+        expirationYear: 2024,
+        cardHolderFirstName: "Lord",
+        cardHolderLastName: "Voldemort",
+      },
+    ],
     displayComponents: {
       // showLabels: true,
       labels: true,
@@ -35,8 +77,14 @@ const constants = {
       // submitButton: true,
       // submitTokenButton: true,
     },
+    additionalFieldsToValidate: ["firstName", "lastName", "emailAddress"],
     style: {
       theme: "ecommerce",
+    },
+    iFrame: {
+      width: "100%",
+      height: "425px",
+      border: "0px",
     },
     customCss: {
       container: {
@@ -132,6 +180,11 @@ const constants = {
           addNewCardBoxText: {},
         }
       },
+      // reCaptcha: {
+      //   text: {
+      //     "font-size": "20px",
+      //   }
+      // }
     },
   },
 };

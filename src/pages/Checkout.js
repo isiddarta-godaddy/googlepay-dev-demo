@@ -28,7 +28,7 @@ const Checkout = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          nonce,
+          ...nonce,
           amount: Number(request.total.amount) * 100,
         }),
       });
