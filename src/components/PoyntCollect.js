@@ -188,8 +188,12 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           shippingMethods: shippingMethods,
           total: total,
         };
-      
+
         event.updateWith(options);
+
+        // setTimeout(() => {
+        //   event.updateWith(options);
+        // }, 10000);
       });
       
       collect.current.on("shipping_method_change", (event) => {
