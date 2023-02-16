@@ -26,7 +26,18 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       return;
     }
   
-    collect.current.getNonce({});
+    collect.current.getNonce({
+      // firstName: "Ethan",
+      // lastName: "Ledner",
+      // emailAddress: "test2@test.test",
+      // phone: "(978) 779-0200",
+      // zipCode: "01740",
+      // line1: "2566 Dow ST",
+      // line2: "Box 168",
+      // city: "Bolton",
+      // territory: "Maine",
+      // countryCode: "US",
+    });
   };
 
   useEffect(() => {
@@ -257,7 +268,8 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
     });
 
     collect.current.on("payment_method_change", (event) => {
-      console.log("payment_method_change", event.paymentMethod);
+      console.log("payment_method_change", event);
+      event.updateWith({});
     });
 
     collect.current.on("payment_authorized", async (event) => {
@@ -299,7 +311,10 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
 
       //invalid_details = react-payment-inputs error (card data)
       //missing_fields = some of the fields that were passed to additionalFieldsToValidate are empty
-      if (event?.data?.error?.type === 'invalid_details' || event?.data?.error?.type === 'missing_fields') {
+      if (
+        event?.data?.error?.type === 'invalid_details' ||
+        event?.data?.error?.type === 'missing_fields'
+      ) {
         message = event.data.error.message === 'Missing details' ? 'Enter a card number' : event.data.error.message;
       }
 

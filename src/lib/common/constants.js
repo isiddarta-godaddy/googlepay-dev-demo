@@ -14,6 +14,7 @@ const constants = {
       type: "TEXT",
     },
     enableCardOnFile: true,
+    forceSaveCardOnFile: true,
     cardAgreementOptions: {
       businessName: "GoDaddy",
       businessWebsite: "https://www.godaddy.com/",
@@ -21,7 +22,7 @@ const constants = {
     },
     savedCards: [
       {
-        id: 1,
+        id: "1",
         type: "VISA",
         numberLast4: "4412",
         expirationMonth: 12,
@@ -30,7 +31,7 @@ const constants = {
         cardHolderLastName: "Potter",
       },
       {
-        id: 2,
+        id: "2",
         type: "MAESTRO",
         numberLast4: "0044",
         expirationMonth: 12,
@@ -39,7 +40,7 @@ const constants = {
         cardHolderLastName: "Weasley",
       },
       {
-        id: 3,
+        id: "3",
         type: "UNIONPAY",
         numberLast4: "0000",
         expirationMonth: 12,
@@ -48,7 +49,7 @@ const constants = {
         cardHolderLastName: "Granger",
       },
       {
-        id: 4,
+        id: "4",
         type: "MASTERCARD",
         numberLast4: "5456",
         expirationMonth: 12,
@@ -58,18 +59,18 @@ const constants = {
       },
     ],
     displayComponents: {
-      // showLabels: true,
-      labels: true,
-      // ecommerceLabels: true,
       // paymentLabel: true,
-      zipCode: true,
+      labels: true,
       firstName: true,
       lastName: true,
       emailAddress: true,
-      // address: true,
-      // state: true,
-      // country: true,
-      // phone: true,
+      phone: true,
+      zipCode: true,
+      line1: true,
+      line2: true,
+      city: true,
+      territory: true,
+      countryCode: true,
       // ecommerceFirstName: true,
       // ecommerceLastName: true,
       // ecommerceEmailAddress: true,
@@ -77,7 +78,28 @@ const constants = {
       // submitButton: true,
       // submitTokenButton: true,
     },
-    additionalFieldsToValidate: ["firstName", "lastName", "emailAddress"],
+    additionalFieldsToValidate: [
+      "firstName",
+      "lastName",
+      "emailAddress",
+      "line1",
+      "line2",
+      "city",
+      "territory",
+      "countryCode",
+      "phone",
+    ],
+    // fields: {
+    //   firstName: "Susie",
+    //   lastName: "Hickle",
+    //   emailAddress: "test@test.test",
+    //   phone: "(603) 893-2225",
+    //   zipCode: "12345",
+    //   line1: "184 N Broadway",
+    //   city: "Salem",
+    //   territory: "New Jersey",
+    //   countryCode: "CA",
+    // },
     style: {
       theme: "ecommerce",
     },
@@ -157,8 +179,28 @@ const constants = {
       },
       rowEmailAddress: {
         "width": "100%",
-        "margin-bottom": "3px",
         "padding-left": "0px",
+        "padding-right": "0px",
+      },
+      rowAddress: {
+        "width": "100%",
+        "padding-left": "0px",
+        "padding-right": "0px",
+      },
+      rowCity: {
+        "width": "50%",
+        "padding-left": "0px",
+      },
+      rowTerritory: {
+        "width": "50%",
+        "padding-right": "0px",
+      },
+      rowCountry: {
+        "width": "50%",
+        "padding-left": "0px",
+      },
+      rowPhone: {
+        "width": "50%",
         "padding-right": "0px",
       },
       cardOnFile: {
@@ -184,7 +226,7 @@ const constants = {
       //   text: {
       //     "font-size": "20px",
       //   }
-      // }
+      // },
     },
   },
 };

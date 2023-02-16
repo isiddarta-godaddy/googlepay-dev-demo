@@ -16,7 +16,7 @@ app.get("/", (_req, res) => {
 
 app.use("/collect", require("./routes/collect"));
 
-const port = 3001;
+const port = 1347;
 app.listen(port, () => {
   console.log(`Google Pay Node JS app listening at ${port}`);
 });

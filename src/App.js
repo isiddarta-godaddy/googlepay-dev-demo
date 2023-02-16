@@ -11,7 +11,7 @@ import CartIcon from './components/CartIcon';
 
 // import "./lib/collect/collect";
 
-// window.chargeEndpoint = 'http://localhost:3001/collect/charge';
+// window.chargeEndpoint = 'http://localhost:1347/collect/charge';
 
 function App() {
   const { totalItems } = useCart();

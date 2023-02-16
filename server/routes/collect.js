@@ -5,7 +5,7 @@ const util = require("util");
 const cors = require('cors');
 
 const corsOptions = {
-  origin: ['https://pay-demo-dev.web.app', 'http://localhost:3000'],
+  origin: ['https://pay-demo-dev.web.app', 'http://localhost:3000', 'http://localhost:3001'],
 };
 
 router.options("/charge", cors(corsOptions));
@@ -24,7 +24,6 @@ router.post("/charge", cors(corsOptions), async (req, res) => {
       emailReceipt: !!req.body.emailAddress,
       partialAuthEnabled: false,
       receiptEmailAddress: req.body.emailAddress,
-      street: req.body.street,
     });
 
     if (charge && charge.status === 'DECLINED') {
