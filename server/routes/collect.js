@@ -24,6 +24,7 @@ router.post("/charge", cors(corsOptions), async (req, res) => {
       emailReceipt: !!req.body.emailAddress,
       partialAuthEnabled: false,
       receiptEmailAddress: req.body.emailAddress,
+      source: "WEB",
     });
 
     if (charge && charge.status === 'DECLINED') {

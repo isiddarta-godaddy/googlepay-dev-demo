@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 // global configs
-global.configs = require("./lib/configs");
+global.configs = require("./lib/configs-ci");
 
 // redirect home to Connect demo
 app.get("/", (_req, res) => {
