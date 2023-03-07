@@ -111,6 +111,7 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
           ...constants.poyntCollect,
           paymentMethods: paymentMethods,
           buttonOptions: {
+            color: "black",
             onClick: (event) => {
               console.log("ORDER", order.current);
 
