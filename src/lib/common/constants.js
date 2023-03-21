@@ -4,15 +4,16 @@ const constants = {
   poyntCollect: {
     // businessId: "01776564-e3e2-45ea-8f5d-db2440ed4ba8", //DEV
     // businessId: "f36d3d71-5249-45c5-9104-38b07fe84f30", //TEST US
-    businessId: "ee606574-dcb8-4805-9461-f823081d2737",   //TEST CA
+    businessId: "ee606574-dcb8-4805-9461-f823081d2737", //TEST CA
     // businessId: "f36d3d71-5249-45c5-9104-38b07fe84f30", //OTE
-    applicationId: "urn:aid:9c2cc0f7-e2ed-4617-b57c-88dd0b36c3d8", //DEV
+    // applicationId: "urn:aid:9c2cc0f7-e2ed-4617-b57c-88dd0b36c3d8", //DEV
     // applicationId: "urn:aid:8f0096f7-fd60-4fb4-8eae-51ec75739866", //TEST
     // applicationId: "urn:aid:b666c3a2-ccc3-4acb-a166-eb905258f42b", //OTE
+    applicationId: "urn:aid:postman-runner",
     // applicationId: "urn:aid:poynt.net",
     merchantName: "GD Test Merchant",
-    country: "US",
-    currency: "USD",
+    country: "CA",
+    currency: "CAD",
     locale: "en-CA",
     // enableReCaptcha: true,
     // reCaptchaOptions: {
