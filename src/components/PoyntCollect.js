@@ -7,6 +7,17 @@ import constants from '../lib/common/constants';
 import { availableCouponCodes } from '../lib/common/data';
 import { createOrder, buildLineItems, buildTotal, getShippingMethods } from '../lib/helpers/wallet';
 
+const parseMesasge = (event) => {
+  ///http request error
+  if (event?.data?.developerMessage || event?.data?.message) {
+    return event.data.developerMessage || event.data.message;
+  }
+
+  if (event?.data?.error?.source === 'submit') {
+    return event.data.error.message;
+  }
+};
+
 const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartTotal, couponCode}) => {
   const alert = useAlert();
   const collect = useRef();
@@ -160,10 +171,6 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
       setSavedCard(event.data.cardId);
     });
 
-    collect.current.on("card_on_file_error", (event) => {
-      console.log("card_on_file_error", event);
-    });
-
     collect.current.on("wallet_button_click", (data) => {
       console.log("BUTTON CLICKED! Source: " + data.source);
     });
@@ -301,28 +308,9 @@ const PoyntCollect = ({setLoading, options, collectId, onNonce, cartItems, cartT
     });
 
     collect.current.on("error", (event) => {
-      let message;
+      const message = parseMesasge(event);
 
       console.log(event);
-
-      ///open-tokenize request error
-      if (event?.data?.message) {
-        message = event.data.message;
-      }
-
-      //invalid_details = react-payment-inputs error (card data)
-      //missing_fields = some of the fields that were passed to additionalFieldsToValidate are empty
-      if (
-        event?.data?.error?.type === 'invalid_details' ||
-        event?.data?.error?.type === 'missing_fields'
-      ) {
-        message = event.data.error.message === 'Missing details' ? 'Enter a card number' : event.data.error.message;
-      }
-
-      //zip or email is invalid
-      if (event?.data?.errorType === "invalidEmail" || event?.data?.errorType === "invalidZip") {
-        message = event?.data?.error;
-      }
 
       if (message) {
         setButtonLoading(false);

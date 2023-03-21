@@ -13,10 +13,10 @@ const constants = {
     country: "US",
     currency: "USD",
     locale: "en-CA",
-    enableReCaptcha: true,
-    reCaptchaOptions: {
-      type: "TEXT",
-    },
+    // enableReCaptcha: true,
+    // reCaptchaOptions: {
+    //   type: "TEXT",
+    // },
     enableCardOnFile: true,
     // forceSaveCardOnFile: true,
     cardAgreementOptions: {
